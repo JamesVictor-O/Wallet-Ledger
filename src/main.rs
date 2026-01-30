@@ -1,7 +1,7 @@
 mod wallet;
 
 use std::io::{self, Write};
-use wallet::{TransactionType, Wallet};
+use wallet::{ Wallet};
 
 const WALLET_FILE: &str = "wallet.json";
 
@@ -38,12 +38,11 @@ fn create_new_wallet(wallet: &mut Wallet) {
     if confirm.trim().to_lowercase() == "yes" {
         let name = get_user_input("Enter new wallet name: ");
         *wallet = Wallet::new(name.trim().to_string());
-        println!("✓ New wallet '{}' created successfully!\n", wallet.name);
+        println!(" New wallet '{}' created successfully!\n", wallet.name);
     } else {
         println!("Operation cancelled.\n");
     }
 }
-
 
 fn get_user_input(prompt: &str) -> String {
     print!("{}", prompt);
@@ -60,7 +59,7 @@ fn get_user_input(prompt: &str) -> String {
 fn load_or_create_wallet() -> Wallet {
     match Wallet::load(WALLET_FILE) {
         Ok(wallet) => {
-            println!("✓ Loaded existing wallet: {}\n", wallet.name);
+            println!(" Loaded existing wallet: {}\n", wallet.name);
             wallet
         }
         Err(_) => {
@@ -78,7 +77,7 @@ fn credit_funds(wallet: &mut Wallet) {
     let amount: f64 = match amount_str.trim().parse() {
         Ok(val) => val,
         Err(_) => {
-            println!("❌ Invalid amount.\n");
+            println!("Invalid amount.\n");
             return;
         }
     };
@@ -87,11 +86,11 @@ fn credit_funds(wallet: &mut Wallet) {
 
     match wallet.credit(amount, description.trim().to_string()) {
         Ok(_) => {
-            println!("✓ Successfully credited ${:.2}", amount);
+            println!("Successfully credited ${:.2}", amount);
             println!("  New balance: ${:.2}\n", wallet.get_balance());
             save_wallet(wallet);
         }
-        Err(e) => println!("❌ Error: {}\n", e),
+        Err(e) => println!("Error: {}\n", e),
     }
 }
 
@@ -102,7 +101,7 @@ fn debit_funds(wallet: &mut Wallet) {
     let amount: f64 = match amount_str.trim().parse() {
         Ok(val) => val,
         Err(_) => {
-            println!("❌ Invalid amount.\n");
+            println!("Invalid amount.\n");
             return;
         }
     };
@@ -115,7 +114,7 @@ fn debit_funds(wallet: &mut Wallet) {
             println!("  New balance: ${:.2}\n", wallet.get_balance());
             save_wallet(wallet);
         }
-        Err(e) => println!("❌ Error: {}\n", e),
+        Err(e) => println!("Error: {}\n", e),
     }
 }
 
@@ -127,6 +126,6 @@ fn view_balance(wallet: &Wallet) {
 
 fn save_wallet(wallet: &Wallet) {
     if let Err(e) = wallet.save(WALLET_FILE) {
-        println!("⚠️  Warning: Failed to save wallet: {}", e);
+        println!("Warning: Failed to save wallet: {}", e);
     }
 }

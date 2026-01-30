@@ -9,14 +9,16 @@ pub enum TransactionType {
     Debit,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Transaction {
     pub transaction_type: TransactionType,
     pub amount: f64,
-    pub timestamp: DataTime<Utc>,
+    pub timestamp: DateTime<Utc>,
     pub description: String,
     pub balance_after: f64,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Wallet {
     pub name: String,
     pub balance: f64,
@@ -83,21 +85,19 @@ impl Wallet {
         self.balance
     }
 
-    pub fn get_transactions(&self) -> &Vec<Transaction>{
+    pub fn get_transactions(&self) -> &Vec<Transaction> {
         &self.transactions
     }
 
-    pub fn save(&self, filename: &str) -> io::Result<()>{
+    pub fn save(&self, filename: &str) -> io::Result<()> {
         let json = serde_json::to_string_pretty(self)?;
         fs::write(filename, json)?;
         Ok(())
     }
-    
+
     pub fn load(filename: &str) -> io::Result<Self> {
         let data = fs::read_to_string(filename)?;
         let wallet: Wallet = serde_json::from_str(&data)?;
         Ok(wallet)
     }
-
-
 }
