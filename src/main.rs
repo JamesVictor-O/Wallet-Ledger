@@ -1,7 +1,7 @@
 mod wallet;
 
 use std::io::{self, Write};
-use wallet::{ Wallet};
+use wallet::Wallet;
 
 const WALLET_FILE: &str = "wallet.json";
 
@@ -13,6 +13,8 @@ fn main() {
     let mut wallet = load_or_create_wallet();
 
     loop {
+        display_menu();
+
         let choice = get_user_input("Enter your choice: ");
 
         match choice.trim() {
@@ -20,7 +22,7 @@ fn main() {
             "2" => credit_funds(&mut wallet),
             "3" => debit_funds(&mut wallet),
             "4" => view_balance(&wallet),
-            "6" => {
+            "5" => {
                 save_wallet(&wallet);
                 println!("\nThank you for using Wallet Ledger. Goodbye!");
                 break;
@@ -28,6 +30,18 @@ fn main() {
             _ => println!("\n Invalid choice. Please try again.\n"),
         }
     }
+}
+
+fn display_menu() {
+    println!("┌─────────────────────────────┐");
+    println!("│         MAIN MENU           │");
+    println!("├─────────────────────────────┤");
+    println!("│ 1. Create New Wallet        │");
+    println!("│ 2. Credit Funds             │");
+    println!("│ 3. Debit Funds              │");
+    println!("│ 4. View Balance             │");
+    println!("│ 5. Save and Exit            │");
+    println!("└─────────────────────────────┘\n");
 }
 
 fn create_new_wallet(wallet: &mut Wallet) {

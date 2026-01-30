@@ -1,0 +1,13 @@
+{
+  "name": "James",
+  "balance": 2000.0,
+  "transactions": [
+    {
+      "transaction_type": "Credit",
+      "amount": 2000.0,
+      "timestamp": "2026-01-30T21:22:42.101734Z",
+      "description": "crediting my wallet",
+      "balance_after": 2000.0
+    }
+  ]
+}
