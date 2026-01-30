@@ -13,10 +13,8 @@ fn main() {
     let mut wallet = load_or_create_wallet();
 
     loop {
-        display_menu();
-        
         let choice = get_user_input("Enter your choice: ");
-        
+
         match choice.trim() {
             "1" => create_new_wallet(&mut wallet),
             "2" => credit_funds(&mut wallet),
@@ -27,16 +25,16 @@ fn main() {
                 println!("\nThank you for using Wallet Ledger. Goodbye!");
                 break;
             }
-            _ => println!("\n❌ Invalid choice. Please try again.\n"),
+            _ => println!("\n Invalid choice. Please try again.\n"),
         }
     }
 }
 
 fn create_new_wallet(wallet: &mut Wallet) {
     println!("\n--- Create New Wallet ---");
-    
+
     let confirm = get_user_input("Are you sure? (yes/no): ");
-    
+
     if confirm.trim().to_lowercase() == "yes" {
         let name = get_user_input("Enter new wallet name: ");
         *wallet = Wallet::new(name.trim().to_string());
@@ -46,28 +44,16 @@ fn create_new_wallet(wallet: &mut Wallet) {
     }
 }
 
-fn display_menu() {
-    println!("┌─────────────────────────────┐");
-    println!("│         MAIN MENU           │");
-    println!("├─────────────────────────────┤");
-    println!("│ 1. Create New Wallet        │");
-    println!("│ 2. Credit Funds             │");
-    println!("│ 3. Debit Funds              │");
-    println!("│ 4. View Balance             │");
-    println!("│ 5. View Transaction History │");
-    println!("│ 6. Save and Exit            │");
-    println!("└─────────────────────────────┘\n");
-}
 
 fn get_user_input(prompt: &str) -> String {
     print!("{}", prompt);
     io::stdout().flush().unwrap();
-    
+
     let mut input = String::new();
     io::stdin()
         .read_line(&mut input)
         .expect("Failed to read input");
-    
+
     input
 }
 
@@ -87,7 +73,7 @@ fn load_or_create_wallet() -> Wallet {
 
 fn credit_funds(wallet: &mut Wallet) {
     println!("\n--- Credit Funds ---");
-    
+
     let amount_str = get_user_input("Enter amount to credit: $");
     let amount: f64 = match amount_str.trim().parse() {
         Ok(val) => val,
@@ -96,9 +82,9 @@ fn credit_funds(wallet: &mut Wallet) {
             return;
         }
     };
-    
+
     let description = get_user_input("Enter description: ");
-    
+
     match wallet.credit(amount, description.trim().to_string()) {
         Ok(_) => {
             println!("✓ Successfully credited ${:.2}", amount);
@@ -111,7 +97,7 @@ fn credit_funds(wallet: &mut Wallet) {
 
 fn debit_funds(wallet: &mut Wallet) {
     println!("\n--- Debit Funds ---");
-    
+
     let amount_str = get_user_input("Enter amount to debit: $");
     let amount: f64 = match amount_str.trim().parse() {
         Ok(val) => val,
@@ -120,9 +106,9 @@ fn debit_funds(wallet: &mut Wallet) {
             return;
         }
     };
-    
+
     let description = get_user_input("Enter description: ");
-    
+
     match wallet.debit(amount, description.trim().to_string()) {
         Ok(_) => {
             println!("✓ Successfully debited ${:.2}", amount);
@@ -138,7 +124,6 @@ fn view_balance(wallet: &Wallet) {
     println!("Wallet: {}", wallet.name);
     println!("Balance: ${:.2}\n", wallet.get_balance());
 }
-
 
 fn save_wallet(wallet: &Wallet) {
     if let Err(e) = wallet.save(WALLET_FILE) {
