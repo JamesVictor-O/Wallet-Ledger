@@ -32,6 +32,20 @@ impl  Wallet {
     pub fn credit(&mut self, amount:f64, description: String) -> Result<(), String>{
         if amount <= 0.0 {
             return Err("Amount must be positive".to_string());
-        }
+        };
+
+        self.balance += amount ;
+
+        let transaction = Transaction {
+            transaction_type : TransactionType::Credit,
+            amount,
+            timestamp : Utc::now(),
+            description,
+            balance_after: self.balance
+        };
+
+        self.transactions.push(transaction);
+
+        Ok(())
     }
 }
